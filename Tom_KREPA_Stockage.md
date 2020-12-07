@@ -72,3 +72,39 @@
 	* sudo mdadm --manage /dev/md126 --add /dev/nouveau_disque
 	
 ### Partie 3
+
+#### Partie 4
+
+* Installation de samba
+	* sudo apt install samba samba-common samba-testsuite
+	
+* Edition du fichier de conf
+	* sudo nano /etc/samba/smb.conf
+
+	[global]
+	netbios name = SAMBA
+	workgroup = WORKGROUP
+	server string = Samba, Debian
+	dsn proxy = no
+	logfile = /var/log/samba/log.%m
+	max log size = 1000
+	syslog = 0
+	server role = standalone server
+	passdb backend = tdbsam
+	obey pam restrictions = yes 
+	unix password sync = yes
+	passwd program = /usr/bin/passwd %u
+	pam password change = yes
+	map to guest = bad user
+	usershare allow guests = yes
+	browsable = yes
+	security = user
+	
+	[PARTAGE EVAL]
+	path = /mnt/preproduction/courant
+	readonly = no
+	writable = yes
+	browsable = yes
+	valid users = jerome karim fernanda
+	
+*
