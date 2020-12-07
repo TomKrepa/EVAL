@@ -82,9 +82,9 @@
 	* sudo nano /etc/samba/smb.conf
 
 	[global]
-	netbios name = SAMBA
-	workgroup = WORKGROUP
-	server string = Samba, Debian
+*netbios name = SAMBA
+*workgroup = WORKGROUP
+*server string = Samba, Debian
 	dsn proxy = no
 	logfile = /var/log/samba/log.%m
 	max log size = 1000
