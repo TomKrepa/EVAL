@@ -73,6 +73,9 @@
 	
 ### Partie 3
 
+* Agrandissement du disque dans sauvegarde
+	* sudo lvextend -l60%FREE /dev/mapper/sauvegarde-courant
+
 #### Partie 4
 
 * Installation de samba
@@ -80,31 +83,53 @@
 	
 * Edition du fichier de conf
 	* sudo nano /etc/samba/smb.conf
+	* [global]
+	* netbios name = SAMBA
+	* workgroup = WORKGROUP
+	* server string = Samba, Debian
+	* dsn proxy = no
+	* logfile = /var/log/samba/log.%m
+	* max log size = 1000
+	* syslog = 0
+	* server role = standalone server
+	* passdb backend = tdbsam
+	* obey pam restrictions = yes
+	* unix password sync = yes
+	* passwd program = /usr/bin/passwd %u
+	* pam password change = yes
+	* map to guest = bad user
+	* usershare allow guests = yes
+	* browsable = yes
+	* security = user
+	
+	* [PARTAGE EVAL]
+	* path = /mnt/preproduction/courant
+	* readonly = no
+	* writable = yes
+	* browsable = yes
+	* valid users = jerome karim fernanda
+	
+* Verification du fichier de conf avec testparm
+	* testparm
 
-	[global]
-*netbios name = SAMBA
-*workgroup = WORKGROUP
-*server string = Samba, Debian
-	dsn proxy = no
-	logfile = /var/log/samba/log.%m
-	max log size = 1000
-	syslog = 0
-	server role = standalone server
-	passdb backend = tdbsam
-	obey pam restrictions = yes 
-	unix password sync = yes
-	passwd program = /usr/bin/passwd %u
-	pam password change = yes
-	map to guest = bad user
-	usershare allow guests = yes
-	browsable = yes
-	security = user
+* Creation des utilisateurs
+	* sudo useradd jerome
+	* sudo smbpasswd-a jerome
+	* sudo passwd jerome
+	* sudo useradd karim
+	* sudo smbpasswd-a karim
+	* sudo passwd karim
+	* sudo useradd fernanda
+	* sudo smbpasswd-a fernanda
+	* sudo passwd fernanda
 	
-	[PARTAGE EVAL]
-	path = /mnt/preproduction/courant
-	readonly = no
-	writable = yes
-	browsable = yes
-	valid users = jerome karim fernanda
+* Relancement des services nmbd et smbd
+	* sudo systemctl restart nmbd.service smbd.service
+
+##### Partie 5
+
+* Destruction du LV preproduction/en-attente
+	* sudo lvremove /dev/preproduction/en-attente
 	
-*
+* Creation du partition snapshot qui remplace preproduction-en-attente
+	* sudo lvcreate -s -l100%FREE -n snaps_production /dev/mapper/production-courant
