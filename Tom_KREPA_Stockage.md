@@ -60,7 +60,7 @@
 	* /dev/mapper/preproduction-en--attente		/preproduction/en-attente			ext4	defaults	0 0
 	* /dev/mapper/sauvegarde-courant	/mnt/sauvegarde/courant			xfs		defaults	0 0
 	
-## Partie 2
+# Partie 2
 
 * Declarer le disque comme defaillant
 	* sudo mdadm --manage /dev/md126 --set-faulty /dev/sdb
@@ -71,12 +71,12 @@
 * Ajouter un nouveau disque
 	* sudo mdadm --manage /dev/md126 --add /dev/nouveau_disque
 	
-### Partie 3
+# Partie 3
 
 * Agrandissement du disque dans sauvegarde
 	* sudo lvextend -l60%FREE /dev/mapper/sauvegarde-courant
 
-#### Partie 4
+# Partie 4
 
 * Installation de samba
 	* sudo apt install samba samba-common samba-testsuite
@@ -126,7 +126,7 @@
 * Relancement des services nmbd et smbd
 	* sudo systemctl restart nmbd.service smbd.service
 
-##### Partie 5
+# Partie 5
 
 * Destruction du LV preproduction/en-attente
 	* sudo lvremove /dev/preproduction/en-attente
