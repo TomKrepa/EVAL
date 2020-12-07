@@ -1,5 +1,52 @@
 # Partie 1
-* Creation des disque
-	* sudo..
 
+* Creation de 3 raid 5 sur les disques
+	* sudo mdadm --create /dev/md/raidn1 -l5 -n3 /dev/sdb /dev/sdc /dev/sdd
+	* sudo mdadm --create /dev/md/raidn2 -l5 -n3 /dev/sde /dev/sdf /dev/sdg
+	* sudo mdadm --create /dev/md/raidn3 -l5 -n3 /dev/sdh /dev/sdi /dev/sdj
+
+* Creation des PV
+	* sudo pvcreate /dev/md127
+	* sudo pvcreate /dev/md126
+	* sudo pvcreate /dev/md125
+	
+* Creation des VG
+	* sudo vgcreate production /dev/md127
+	* sudo vgcreate preproduction /dev/md126
+	* sudo vgcreate sauvegarde /dev/md125
+	
+* Creation des LV
+	* sudo lvcreate -L 4G -n courant production
+	* sudo lvcreate -L 4G -n en-attente production
+	* sudo lvcreate -L 4G -n courant preproduction
+	* sudo lvcreate -L 4G -n en-attente preproduction
+	* sudo lvcreate -L 4G -n courant sauvegarde
+	
+* Formatage des partitions en ext4 et xfs
+	* sudo mkfs -t ext4 /dev/mapper/production-courant
+	* sudo mkfs -t ext4 /dev/mapper/production-en--attente
+	* sudo mkfs -t ext4 /dev/mapper/preproduction-courant
+	* sudo mkfs -t ext4 /dev/mapper/preproduction-en--attente
+	* sudo mkfs -t xfs /dev/mapper/sauvegarde-courant
+	
+* Ajout d'un label pour chaque partitions
+	* sudo tune2fs -L courant-fs /dev/mapper/production-courant
+	* sudo tune2fs -L en-attente-fs /dev/mapper/production-en--attente
+	* sudo tune2fs -L courant-fs /dev/mapper/preproduction-courant
+	* sudo tune2fs -L en-attente-fs /dev/mapper/preproduction-en--attente
+	* sudo xfs_admin -L courant-fs /dev/mapper/sauvegarde-courant
+	
+* Creation des points de montage
+	* sudo mkdir /mnt/production
+	* sudo mkdir /mnt/production/courant
+	* sudo mkdir /mnt/production/en-attente
+	* sudo mkdir /mnt/preproduction
+	* sudo mkdir /mnt/preproduction/courant
+	* sudo mkdir /mnt/preproduction/en-attente
+	* sudo mkdir /mnt/sauvegarde
+	* sudo mkdir /mnt/sauvegarde/courant
+	
+* Montage des partitions
+	*
+	
 ## Partie 2
